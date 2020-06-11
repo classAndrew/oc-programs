@@ -1,29 +1,30 @@
-moves = 4 --side length of farmland
+moves = 9 --side length of farmland
 function tryHarvest()
-    if component.geolyzer.analyze(0).growth == 1 then
-        robot.swingDown()
+    local b, v = turtle.inspectDown()
+    if b and v.metadata == 7 then
+        turtle.digDown()
     end
-    robot.placeDown()
+    turtle.placeDown()
 end
 
 function depositChest()
     for i=2,16 do
-        robot.select(i)
-        robot.dropDown()
+        turtle.select(i)
+        turtle.dropDown()
     end
-    robot.select(1)
+    turtle.select(1)
 end
 
 function farm ()
     for i = 0, moves-1 do
         local j = 0
         while j <= moves-1 do
-            local res = robot.forward()
+            local res = turtle.forward()
             if not res then
-                robot.up()
-                robot.forward()
-                robot.forward()
-                robot.down()
+                turtle.up()
+                turtle.forward()
+                turtle.forward()
+                turtle.down()
                 j = j + 1
             end
             tryHarvest()
@@ -31,29 +32,35 @@ function farm ()
         end
         if i ~= moves-1 then
             if i%2==0 then     
-                robot.turnRight()
-                robot.forward()
-                robot.turnRight()
+                turtle.turnRight()
+                turtle.forward()
+                turtle.turnRight()
             else
-                robot.turnLeft()
-                robot.forward()
-                robot.turnLeft()
+                turtle.turnLeft()
+                turtle.forward()
+                turtle.turnLeft()
             end
         end
         tryHarvest()
     end
     if moves%2==0 then
-        robot.turnRight()
-        for i=0, moves-2 do robot.forward() end
+        turtle.turnRight()
+        for i=0, moves-2 do 
+            turtle.forward() 
+        end
 
     else
-        robot.turnRight()
-        robot.turnRight()
-        for i=0, moves-1 do robot.forward() end
-        robot.turnRight()
-        for i=0, moves-2 do robot.forward() end
+        turtle.turnRight()
+        turtle.turnRight()
+        for i=0, moves-1 do 
+            turtle.forward() 
+        end
+        turtle.turnRight()
+        for i=0, moves-2 do 
+            turtle.forward() 
+        end
     end
-    robot.turnRight()
+    turtle.turnRight()
     depositChest()
 end
 

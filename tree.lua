@@ -1,7 +1,7 @@
-trees = 5
+trees = 3
 
 function fuelCheck() 
-    if turtle.getFuelLevel() < 5 then
+    if turtle.getFuelLevel() < 10 then
         for i=1, 16 do 
             turtle.select(i)
             local detail = turtle.getItemDetail()
@@ -15,14 +15,39 @@ function fuelCheck()
 end
 
 function mineAround()
-    turtle.turnRight()
+    
+    changeDirection(0)
     turtle.dig()
-    turtle.turnRight()
+    
+    changeDirection(0)
     turtle.dig()
-    turtle.turnRight()
+    
+    changeDirection(0)
     turtle.dig()
-    turtle.turnRight()
+    
+    changeDirection(0)
     turtle.dig()
+end
+
+function changeDirection(lr)
+    local f = fs.open("state", "r")
+    local state = tonumber(f.readLine())
+    if lr == 0 then -- turn right
+        turtle.turnRight()
+        state = (state+1)%4
+    else -- turn left
+        turtle.turnLeft()
+        if state == 0 then
+            state = 3
+        else
+            state = state - 1
+        end
+    end
+    print(state)
+    f.close()
+    local f = fs.open("state", "w")
+    f.write(state)
+    f.close()
 end
 
 function harvestTree() 
@@ -78,7 +103,8 @@ function deposit()
 end
 
 function grabfuel()
-    turtle.turnRight()
+    
+    changeDirection(0)
     local _, ischest = turtle.inspect()
     if turtle.getFuelLevel() < trees*10*4 then
         if _ and ischest then
@@ -87,7 +113,8 @@ function grabfuel()
             print("NO CHEST DETECTED ABOVE")
         end
     end
-    turtle.turnLeft()
+    
+    changeDirection(1)
 end
 
 function begin()
@@ -105,18 +132,53 @@ function begin()
                 replant()
             end
             if i ~= trees then
-                turtle.turnLeft()
+                
+                changeDirection(1)
                 turtle.forward()
                 turtle.forward()
                 turtle.forward()
-                turtle.turnRight()
+                
+                changeDirection(0)
             end
         end
-        turtle.turnRight()
+        
+        changeDirection(0)
         for i=1,(trees-1)*3 do turtle.forward() end
-        turtle.turnLeft()
+        
+        changeDirection(1)
         deposit()
         os.sleep(10)
     end
 end
-begin()
+
+function returnBase() 
+    goBack()
+    local f = fs.open("state", "r")
+    local dir = tonumber(f.readLine())
+    print("beginning: "..dir)
+    if dir == 1 then
+        
+        changeDirection(0)
+        changeDirection(0)
+    elseif dir == 2 then
+        
+        changeDirection(0)
+    elseif dir == 0 then
+        
+        changeDirection(1)
+    end
+    while turtle.back() do
+        
+    end
+    
+    changeDirection(0)
+    while turtle.forward() do end
+    
+    changeDirection(1)
+end
+
+function onBoot() 
+    returnBase()
+    begin()
+end
+onBoot()

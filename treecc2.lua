@@ -63,9 +63,13 @@ function chopTree()
       turtle.up()
       success, block = turtle.inspectUp()
     end
-    while not turtle.detectDown() do
+    worked, thing = turtle.inspectDown()
+    while worked and thing.name == "minecraft:leaves" do
+      turtle.digDown()
       turtle.down()
+      worked, thing = turtle.inspectDown()
     end
+    while turtle.down() do end
     turtle.back()
     turtle.place()
   end
@@ -103,11 +107,16 @@ function reState()
       turtle.turnLeft()
       return
     end
-  elseif not worked or not wood.name == "minecraft:planks" then
-    while turtle.down() do end --will have to break down leaves in future if grow as soon as start
+  elseif not worked or wood.name == "minecraft:leaves" then
+    while worked and wood.name == "minecraft:leaves" do 
+      turtle.digDown()
+      turtle.down()
+      worked, wood = turtle.inspectDown()
+    end --will have to break down leaves in future if grow as soon as start
+    while turtle.down() do end
     turtle.forward()
     turtle.turnLeft()
-    local success, block = turtle.detect()
+    local success, block = turtle.inspectDown()
     local call = "turnLeft"
     if success and block.name == "minecraft:torch" then
       call = "turnRight"

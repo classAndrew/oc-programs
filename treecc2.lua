@@ -98,8 +98,8 @@ function reState()
   local worked_sap, sap = turtle.inspect()
   if worked and wood.name == "minecraft:chest" then
     return
-  elseif worked_sap and sap.name == "minecraft:sapling" then
-    -- Handle the special case where turtle is staring at sapling
+  elseif worked_sap and (sap.name == "minecraft:sapling" or sap.name == "minecraft:log") then
+    -- Handle the special case where turtle is staring at sapling or log
     turtle.turnRight() -- take a guess
     while turtle.forward() do end
     local worked_c, chest = turtle.inspect()

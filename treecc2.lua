@@ -15,7 +15,7 @@ function justRefuel()
   if not fuelOk() then
     local fuelchest = peripheral.wrap(fuelChest)
     for i, v in pairs(fuelchest.list()) do
-      if v.name == "minecraft:coal" or v.name == "minecraft:charcoal" then
+      if v.name == "minecraft:coal" then
         fuelchest.pushItems(buffer, i)
         break
       end

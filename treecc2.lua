@@ -33,7 +33,7 @@ function justRefuel()
     local chest = peripheral.wrap(sapChest)
     for i, v in pairs(chest.list()) do
       if v.name == "minecraft:sapling" then
-        chest.pushItems(buffer, 1)
+        chest.pushItems(buffer, i)
         turtle.suck(20-turtle.getItemCount())
         peripheral.wrap(buffer).pushItems(sapChest, 1)
         break

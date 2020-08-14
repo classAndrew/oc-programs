@@ -3,9 +3,9 @@ walk = 13
 trees = 6 --one side of the trees
 CHECKTIME = 120 --seconds
 sapChest = "minecraft:chest_4086"
-buffer = "minecraft:chest_4088"
-fuelChest = "minecraft:chest_4089"
-outputChest = "minecraft:chest_4090"
+buffer = "minecraft:chest_4091" -- This is the only field that should be edited.
+fuelChest = "minecraft:chest_4089" 
+outputChest = "minecraft:chest_4090" 
 
 function fuelOk()
   return turtle.getFuelLevel() > walk+trees*2*6*2
@@ -107,6 +107,10 @@ function reState()
       turtle.turnLeft()
       return
     end
+  elseif worked and wood.name == "minecraft:chest" then
+    -- Turtle is sitting on the chest but facing forward
+    turtle.turnRight()
+    return
   elseif not worked or wood.name == "minecraft:leaves" then
     while worked and wood.name == "minecraft:leaves" do 
       turtle.digDown()
